@@ -30,7 +30,9 @@ import (
 	"github.com/go-openapi/loads"
 )
 
+var AllowErrors = flag.Bool("allow-errors", false, "If true, don't fail on errors.")
 var GenOpenApiDir = flag.String("gen-open-api-dir", "gen_open_api/", "Directory containing open api files")
+var ConfigDir = flag.String("config-dir", "", "Directory contain api files.")
 
 func NewConfig() *Config {
 	config := loadYamlConfig()
@@ -125,7 +127,7 @@ func (c *Config) CleanUp() {
 
 // loadYamlConfig reads the config yaml file into a struct
 func loadYamlConfig() *Config {
-	f := filepath.Join(*GenOpenApiDir, "config.yaml")
+	f := filepath.Join(*ConfigDir, "config.yaml")
 
 	config := &Config{}
 	contents, err := ioutil.ReadFile(f)
@@ -145,7 +147,7 @@ func loadYamlConfig() *Config {
 // initOpExample reads the example config for each operation and sets it
 func (config *Config) initOpExample(o *Operation) {
 	path := o.Type.Name + ".yaml"
-	path = filepath.Join(config.ExampleLocation, o.Definition.Name, path)
+	path = filepath.Join(*ConfigDir, config.ExampleLocation, o.Definition.Name, path)
 	path = strings.Replace(path, " ", "_", -1)
 	path = strings.ToLower(path)
 	content, err := ioutil.ReadFile(path)
@@ -159,7 +161,7 @@ func (config *Config) initOpExample(o *Operation) {
 }
 
 func (config *Config) GetDefExampleFile(d *Definition) string {
-	return strings.Replace(strings.ToLower(filepath.Join(config.ExampleLocation, d.Name, d.Name+".yaml")), " ", "_", -1)
+	return strings.Replace(strings.ToLower(filepath.Join(*ConfigDir, config.ExampleLocation, d.Name, d.Name+".yaml")), " ", "_", -1)
 }
 
 func (config *Config) initDefExample(d *Definition) {

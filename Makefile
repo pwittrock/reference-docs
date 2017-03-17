@@ -52,9 +52,6 @@ pushapi: api
 updateapispec: api
 	cp $(K8SROOT)/api/openapi-spec/swagger.json gen_open_api/openapi-spec/swagger.json
 
-ca:
-	ls $(K8SIOROOT) /docs/api-reference/v1.6/
-
 copyapi: api
 	rm -rf gen_open_api/build/documents/
 	rm -rf gen_open_api/build/runbrodocs.sh

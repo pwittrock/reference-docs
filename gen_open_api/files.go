@@ -30,8 +30,8 @@ import (
 )
 
 func WriteTemplates(config *api.Config) {
-	if _, err := os.Stat(*api.GenOpenApiDir + "/includes"); os.IsNotExist(err) {
-		os.Mkdir(*api.GenOpenApiDir+"/includes", os.FileMode(0700))
+	if _, err := os.Stat(*api.ConfigDir + "/includes"); os.IsNotExist(err) {
+		os.Mkdir(*api.ConfigDir+"/includes", os.FileMode(0700))
 	}
 
 	// Write the index file importing each of the top level concept files
@@ -49,7 +49,7 @@ func getTemplateFile(name string) string {
 }
 
 func getStaticIncludesDir() string {
-	return filepath.Join(*api.GenOpenApiDir, "static_includes")
+	return filepath.Join(*api.ConfigDir, "static_includes")
 }
 
 func WriteIndexFile(config *api.Config) {
@@ -69,7 +69,7 @@ func WriteIndexFile(config *api.Config) {
 	// Copy over the includes
 	err := filepath.Walk(getStaticIncludesDir(), func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() {
-			to := filepath.Join(*api.GenOpenApiDir, "includes", filepath.Base(path))
+			to := filepath.Join(*api.ConfigDir, "includes", filepath.Base(path))
 			return os.Link(path, to)
 		}
 		return nil
@@ -138,7 +138,7 @@ func WriteIndexFile(config *api.Config) {
 	if err != nil {
 		fmt.Printf("Could not Marshal manfiest %+v due to error: %v.\n", manifest, err)
 	} else {
-		jsonfile, err := os.Create(*api.GenOpenApiDir + "/" + lib.JsonOutputFile)
+		jsonfile, err := os.Create(*api.ConfigDir + "/" + lib.JsonOutputFile)
 		if err != nil {
 			fmt.Printf("Could not create file %s due to error: %v.\n", lib.JsonOutputFile, err)
 		} else {
@@ -215,7 +215,7 @@ func getImport(s string) string {
 }
 
 func toFileName(s string) string {
-	return fmt.Sprintf("%s/includes/_%s.md", *api.GenOpenApiDir, s)
+	return fmt.Sprintf("%s/includes/_%s.md", *api.ConfigDir, s)
 }
 
 func GetDefinitionImport(d *api.Definition) string {

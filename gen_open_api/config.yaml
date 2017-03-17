@@ -1,4 +1,4 @@
-example_location: "gen_open_api/examples"
+example_location: "examples"
 api_groups:
   - "Apps"
   - "Authentication"
